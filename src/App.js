@@ -5,8 +5,8 @@ import QueryDrawer from './components/QueryDrawer';
 import firebaseConfig from './environment';
 import './App.css';
 
-firebase.initializeApp(firebaseConfig());
-firebase.auth().signInWithEmailAndPassword('test@test.com', 'password');
+// firebase.initializeApp(firebaseConfig());
+// firebase.auth().signInWithEmailAndPassword('test@test.com', 'password');
 
 const theme = createMuiTheme({
   palette: {

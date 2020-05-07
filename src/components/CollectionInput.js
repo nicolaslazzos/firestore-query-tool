@@ -1,46 +1,36 @@
 import React from 'react';
+import DeleteButton from './DeleteButton';
 import {
-  makeStyles,
   TextField,
-  IconButton
+  Grid
 } from '@material-ui/core';
-import {
-  Close as DeleteIcon
-} from '@material-ui/icons';
 
-const drawerWidth = 400;
-
-const useStyles = makeStyles((theme) => ({
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-  },
-  drawer: {
-    position: 'relative',
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  drawerContainer: {
-    overflow: 'auto',
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-}));
-
-export default function CollectionInput() {
-  const classes = useStyles();
-
+export default function CollectionInput(props) {
   return (
-    <React.Fragment>
-      <TextField variant="outlined" label='Collection Name' size='small' />
-      <TextField variant="outlined" label='Document ID' size='small' style={{ marginLeft: 10, marginRight: 10 }} />
-      <IconButton aria-label="delete" size='small'>
-        <DeleteIcon />
-      </IconButton>
-    </React.Fragment>
+    <Grid spacing={1} alignItems='center' style={{ marginBottom: 15 }} container>
+      <Grid item xs>
+        <TextField
+          variant="outlined"
+          label='Collection Name'
+          size='small'
+          fullWidth
+          value={props.collectionName}
+          onChange={props.onCollectionNameChange}
+        />
+      </Grid>
+      <Grid item xs>
+        <TextField
+          variant="outlined"
+          label='Document ID'
+          size='small'
+          fullWidth
+          value={props.documentId}
+          onChange={props.onDocumentIdChange}
+        />
+      </Grid>
+      <Grid xs={1} item>
+        <DeleteButton onClick={props.onDeleteClick} />
+      </Grid>
+    </Grid>
   )
 }
