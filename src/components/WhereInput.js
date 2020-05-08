@@ -53,7 +53,7 @@ export default function WhereInput(props) {
           onChange={props.onFieldValueChange}
         />
       </Grid>
-      <Grid item xs={1}>
+      <Grid item>
         <DeleteButton onClick={props.onDeleteClick} />
       </Grid>
     </Grid>

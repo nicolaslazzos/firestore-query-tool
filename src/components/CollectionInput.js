@@ -28,7 +28,7 @@ export default function CollectionInput(props) {
           onChange={props.onDocumentIdChange}
         />
       </Grid>
-      <Grid xs={1} item>
+      <Grid item>
         <DeleteButton onClick={props.onDeleteClick} />
       </Grid>
     </Grid>

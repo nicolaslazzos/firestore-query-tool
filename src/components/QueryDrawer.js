@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import firebase from 'firebase';
 import {
   makeStyles,
   Drawer,
@@ -9,7 +8,6 @@ import {
   Typography,
   Button,
   Grid,
-  TextField
 } from '@material-ui/core';
 import {
   ExpandMore as ExpandMoreIcon
@@ -17,16 +15,9 @@ import {
 import CollectionInput from './CollectionInput';
 import WhereInput from './WhereInput';
 import ExtraInput from './ExtraInput';
-
-const drawerWidth = 500;
+import FirebaseConnection from './FirebaseConnection';
 
 const useStyles = makeStyles((theme) => ({
-  drawer: {
-    position: 'relative',
-    width: drawerWidth,
-    flexShrink: 0,
-    backgroundColor: theme.palette.background.default
-  },
   drawerContainer: {
     overflow: 'auto',
     padding: 15,
@@ -39,19 +30,12 @@ const emptyPathInput = { collectionName: '', documentId: '' };
 const emptyWhereInput = { fieldName: '', condition: '', fieldValue: '' };
 const emptyExtraInput = { extraType: '', extraValue: '' };
 
-export default function QueryDrawer() {
-  const [state, setState] = useState({ firebaseConfiguration: '' });
+export default function QueryDrawer(props) {
   const [pathInputs, setPathInputs] = useState([emptyPathInput]);
   const [whereInputs, setWhereInputs] = useState([emptyWhereInput]);
   const [extraInputs, setExtraInputs] = useState([emptyExtraInput]);
 
   const classes = useStyles();
-
-  const onConnectFirebasePress = () => {
-    if (state.firebaseConfiguration) {
-      firebase.initializeApp(state.firebaseConfiguration);
-    }
-  }
 
   const onPathInputAdd = () => setPathInputs([...pathInputs, emptyPathInput]);
 
@@ -94,34 +78,12 @@ export default function QueryDrawer() {
 
   return (
     <Drawer
-      variant="permanent"
-      className={classes.drawer}
+      anchor='left'
+      open={props.open}
+      onClose={props.onClose}
     >
       <div className={classes.drawerContainer}>
-        <ExpansionPanel>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>FIREBASE CONFIGURATION</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails style={{ alignItems: 'flex-start', padding: 15 }}>
-            <Grid spacing={1} alignItems='center' container>
-              <Grid xs={12} style={{ paddingBottom: 10 }} item>
-                <TextField
-                  label="Firebase Configuration"
-                  placeholder='Paste your firebase configuration JSON here'
-                  variant="outlined"
-                  rows={9}
-                  value={state.firebaseConfiguration}
-                  onChange={event => setState({ ...state, firebaseConfiguration: event.target.value })}
-                  multiline
-                  fullWidth
-                />
-              </Grid>
-              <Grid xs={12} item>
-                <Button variant="contained" color="primary" onClick={onConnectFirebasePress}>CONNECT TO FIREBASE</Button>
-              </Grid>
-            </Grid>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+        <FirebaseConnection />
 
         <ExpansionPanel>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>

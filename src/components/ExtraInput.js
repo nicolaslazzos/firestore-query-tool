@@ -46,7 +46,7 @@ export default function ExtraInput(props) {
           onChange={props.onExtraValueChange}
         />
       </Grid>
-      <Grid item xs={1}>
+      <Grid item>
         <DeleteButton onClick={props.onDeleteClick} />
       </Grid>
     </Grid>
