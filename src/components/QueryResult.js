@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   makeStyles,
   Table,
@@ -13,8 +14,8 @@ import {
 import QueryResultHeader from './QueryResultHeader';
 import QueryResultToolbar from './QueryResultToolbar';
 
-function createData(id, name, calories, fat, carbs, protein) {
-  return { id, name, calories, fat, carbs, protein };
+function createData(_id, name, calories, fat, carbs, protein) {
+  return { _id, name, calories, fat, carbs, protein };
 }
 
 const rows = [
@@ -86,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
   selected: {}
 }));
 
-export default function EnhancedTable() {
+function QueryResult(props) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('name');
   const [selected, setSelected] = React.useState([]);
@@ -98,6 +99,8 @@ export default function EnhancedTable() {
     if (data.length) {
       return Object.keys(data[0]).map(prop => ({ id: prop, numeric: false, disablePadding: true, label: prop }));
     };
+
+    return [];
   }
 
   const onSortPress = (event, prop) => {
@@ -108,19 +111,19 @@ export default function EnhancedTable() {
 
   const onSelectAllPress = event => {
     if (event.target.checked) {
-      const newSelected = rows.map(row => row.id);
+      const newSelected = rows.map(row => row._id);
       return setSelected(newSelected);
     }
 
     setSelected([]);
   };
 
-  const onItemPress = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
+  const onItemPress = (event, _id) => {
+    const selectedIndex = selected.indexOf(_id);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
+      newSelected = newSelected.concat(selected, _id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -132,17 +135,15 @@ export default function EnhancedTable() {
     setSelected(newSelected);
   };
 
-  const isSelected = id => selected.indexOf(id) !== -1;
+  const isSelected = _id => selected.indexOf(_id) !== -1;
 
   const tableCellRenderer = row => {
     const tableCells = [];
     const props = Object.keys(row);
 
     for (const i in props) {
-      if (props[i] !== 'id') {
-        if (i > 1) tableCells.push(<TableCell align="left">{row[props[i]]}</TableCell>);
-        else tableCells.push(<TableCell component="th" scope="row" padding="none">{row[props[i]]}</TableCell>);
-      }
+      if (i) tableCells.push(<TableCell align="left">{row[props[i]]}</TableCell>);
+      else tableCells.push(<TableCell component="th" scope="row" padding="none">{row[props[i]]}</TableCell>);
     }
 
     return tableCells;
@@ -167,22 +168,22 @@ export default function EnhancedTable() {
               selectedCount={selected.length}
               order={order}
               orderBy={orderBy}
-              headCells={getPropNames(rows)}
+              headCells={getPropNames(props.data)}
               onSelectAllPress={onSelectAllPress}
               onRequestSort={onSortPress}
               rowCount={rows.length}
             />
             <TableBody>
-              {sortData(rows, getComparator(order, orderBy)).map(row => {
-                const isItemSelected = isSelected(row.id);
+              {sortData(props.data, getComparator(order, orderBy)).map(row => {
+                const isItemSelected = isSelected(row._id);
 
                 return (
                   <TableRow
                     hover
-                    onClick={event => onItemPress(event, row.id)}
+                    onClick={event => onItemPress(event, row._id)}
                     role="checkbox"
                     tabIndex={-1}
-                    key={row.id.toString()}
+                    key={row._id.toString()}
                     selected={isItemSelected}
                     classes={{ selected: classes.selected }}
                     className={classes.tableRow}
@@ -202,3 +203,10 @@ export default function EnhancedTable() {
     </div>
   );
 }
+
+const mapStateToProps = state => {
+  const { data, loading, error } = state.queryResult;
+  return { data, loading, error };
+}
+
+export default connect(mapStateToProps, null)(QueryResult);

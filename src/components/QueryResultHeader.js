@@ -32,7 +32,7 @@ function QueryResultHeader(props) {
             <TableCell
               key={headCell.id}
               // align={headCell.numeric ? 'right' : 'left'}
-              style={{ paddingLeft: 0, paddingLeft: 0 }}
+              style={{ paddingLeft: 0 }}
               // padding={headCell.disablePadding ? 'none' : 'default'}
               sortDirection={orderBy === headCell.id ? order : false}
             >

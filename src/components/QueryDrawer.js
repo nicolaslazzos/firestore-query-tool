@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import {
   makeStyles,
   Drawer,
@@ -12,6 +13,9 @@ import {
 import {
   ExpandMore as ExpandMoreIcon
 } from '@material-ui/icons';
+import {
+  onDataRead
+} from '../actions';
 import CollectionInput from './CollectionInput';
 import WhereInput from './WhereInput';
 import ExtraInput from './ExtraInput';
@@ -30,7 +34,7 @@ const emptyPathInput = { collectionName: '', documentId: '' };
 const emptyWhereInput = { fieldName: '', condition: '', fieldValue: '' };
 const emptyExtraInput = { extraType: '', extraValue: '' };
 
-export default function QueryDrawer(props) {
+function QueryDrawer(props) {
   const [pathInputs, setPathInputs] = useState([emptyPathInput]);
   const [whereInputs, setWhereInputs] = useState([emptyWhereInput]);
   const [extraInputs, setExtraInputs] = useState([emptyExtraInput]);
@@ -41,39 +45,43 @@ export default function QueryDrawer(props) {
 
   const onPathInputDelete = index => {
     setPathInputs(pathInputs.filter((item, i) => i !== index));
-  }
+  };
 
   const onPathInputChange = ({ prop, value, index }) => {
     setPathInputs(pathInputs.map((item, i) => {
       if (index === i) return { ...item, [prop]: value };
       return item;
     }))
-  }
+  };
 
   const onWhereInputAdd = () => setWhereInputs([...whereInputs, emptyWhereInput]);
 
   const onWhereInputDelete = index => {
     setWhereInputs(whereInputs.filter((item, i) => i !== index));
-  }
+  };
 
   const onWhereInputChange = ({ prop, value, index }) => {
     setWhereInputs(whereInputs.map((item, i) => {
       if (index === i) return { ...item, [prop]: value };
       return item;
     }))
-  }
+  };
 
   const onExtraInputAdd = () => setExtraInputs([...extraInputs, emptyExtraInput]);
 
   const onExtraInputDelete = index => {
     setExtraInputs(extraInputs.filter((item, i) => i !== index));
-  }
+  };
 
   const onExtraInputChange = ({ prop, value, index }) => {
     setExtraInputs(extraInputs.map((item, i) => {
       if (index === i) return { ...item, [prop]: value };
       return item;
     }))
+  };
+
+  const onExecutePress = () => {
+    props.onDataRead({ pathInputs, whereInputs, extraInputs });
   }
 
   return (
@@ -166,7 +174,10 @@ export default function QueryDrawer(props) {
             </Grid>
           </ExpansionPanelDetails>
         </ExpansionPanel>
+        <Button variant="contained" color="primary" style={{ marginTop: 15, alignSelf: 'flex-end' }} onClick={onExecutePress}>EXECUTE QUERY</Button>
       </div>
     </Drawer>
   )
 }
+
+export default connect(null, { onDataRead })(QueryDrawer);

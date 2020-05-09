@@ -1,0 +1,3 @@
+export const ON_DATA_READING = 'ON_DATA_READING'
+export const ON_DATA_READ = 'ON_DATA_READ'
+export const ON_DATA_READ_FAIL = 'ON_DATA_READING_FAIL'
