@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import {
   makeStyles,
@@ -88,19 +88,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function QueryResult(props) {
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('name');
-  const [selected, setSelected] = React.useState([]);
-  const [dense, setDense] = React.useState(false);
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('_id');
+  const [selected, setSelected] = useState([]);
+  const [dense, setDense] = useState(false);
 
   const classes = useStyles();
 
   function getPropNames(data) {
+    let props = [];
+
     if (data.length) {
-      return Object.keys(data[0]).map(prop => ({ id: prop, numeric: false, disablePadding: true, label: prop }));
+      props = Object.keys(data[0]).map(prop => ({ id: prop, numeric: false, disablePadding: true, label: prop }));
     };
 
-    return [];
+    return props;
   }
 
   const onSortPress = (event, prop) => {
@@ -111,7 +113,7 @@ function QueryResult(props) {
 
   const onSelectAllPress = event => {
     if (event.target.checked) {
-      const newSelected = rows.map(row => row._id);
+      const newSelected = props.data.map(row => row._id);
       return setSelected(newSelected);
     }
 
@@ -141,9 +143,8 @@ function QueryResult(props) {
     const tableCells = [];
     const props = Object.keys(row);
 
-    for (const i in props) {
-      if (i) tableCells.push(<TableCell align="left">{row[props[i]]}</TableCell>);
-      else tableCells.push(<TableCell component="th" scope="row" padding="none">{row[props[i]]}</TableCell>);
+    for (const prop of props) {
+      tableCells.push(<TableCell>{row[prop]}</TableCell>);
     }
 
     return tableCells;
@@ -151,7 +152,7 @@ function QueryResult(props) {
 
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper} elevation={3}>
+      < Paper className={classes.paper} elevation={3}>
         <QueryResultToolbar
           title='RESULTS'
           dense={dense}
@@ -171,7 +172,7 @@ function QueryResult(props) {
               headCells={getPropNames(props.data)}
               onSelectAllPress={onSelectAllPress}
               onRequestSort={onSortPress}
-              rowCount={rows.length}
+              rowCount={props.data.length}
             />
             <TableBody>
               {sortData(props.data, getComparator(order, orderBy)).map(row => {
@@ -197,10 +198,10 @@ function QueryResult(props) {
           </Table>
         </TableContainer>
         <Typography className={classes.title} component="div">
-          {`${rows.length} ITEMS`}
+          {`${props.data.length} ITEMS`}
         </Typography>
       </Paper>
-    </div>
+    </div >
   );
 }
 

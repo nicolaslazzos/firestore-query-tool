@@ -28,22 +28,18 @@ function QueryResultHeader(props) {
           </Tooltip>
         </TableCell>
         {props.headCells.map(headCell => (
-          headCell.label !== 'id' ? (
-            <TableCell
-              key={headCell.id}
-              // align={headCell.numeric ? 'right' : 'left'}
-              style={{ paddingLeft: 0 }}
-              // padding={headCell.disablePadding ? 'none' : 'default'}
-              sortDirection={orderBy === headCell.id ? order : false}
+          <TableCell
+            key={headCell.id}
+            sortDirection={orderBy === headCell.id ? order : false}
+          >
+            <TableSortLabel
+              active={orderBy === headCell.id}
+              direction={orderBy === headCell.id ? order : 'asc'}
+              onClick={createSortHandler(headCell.id)}
             >
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : 'asc'}
-                onClick={createSortHandler(headCell.id)}
-              >
-                {headCell.label}
-              </TableSortLabel>
-            </TableCell>) : null
+              {headCell.label}
+            </TableSortLabel>
+          </TableCell>
         ))}
       </TableRow>
     </TableHead>

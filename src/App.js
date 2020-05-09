@@ -25,7 +25,7 @@ const theme = createMuiTheme({
   props: {
     MuiButtonBase: {
       style: {
-        outline: 'none'
+        outline: 'none',
       }
     }
   }
