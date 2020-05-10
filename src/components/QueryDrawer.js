@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const emptyPathInput = { collectionName: '', documentId: '' };
-const emptyWhereInput = { fieldName: '', condition: '', fieldValue: '' };
+const emptyWhereInput = { fieldName: '', condition: '', fieldType: '', fieldValue: '' };
 const emptyExtraInput = { extraType: '', extraValue: '' };
 
 function QueryDrawer(props) {
@@ -61,6 +61,7 @@ function QueryDrawer(props) {
   };
 
   const onWhereInputChange = ({ prop, value, index }) => {
+    console.log(typeof value)
     setWhereInputs(whereInputs.map((item, i) => {
       if (index === i) return { ...item, [prop]: value };
       return item;
@@ -130,11 +131,14 @@ function QueryDrawer(props) {
                 return (
                   <WhereInput
                     fieldName={item.fieldName}
+                    condition={item.condition}
+                    fieldType={item.fieldType}
                     fieldValue={item.fieldValue}
                     key={index.toString()}
                     onFieldNameChange={event => onWhereInputChange({ prop: 'fieldName', value: event.target.value, index })}
-                    onFieldValueChange={event => onWhereInputChange({ prop: 'fieldValue', value: event.target.value, index })}
                     onConditionChange={event => onWhereInputChange({ prop: 'condition', value: event.target.value, index })}
+                    onFieldTypeChange={event => onWhereInputChange({ prop: 'fieldType', value: event.target.value, index })}
+                    onFieldValueChange={value => onWhereInputChange({ prop: 'fieldValue', value, index })}
                     onDeleteClick={() => onWhereInputDelete(index)}
                   />
                 );

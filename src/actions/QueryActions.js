@@ -21,8 +21,9 @@ export const onDataRead = ({ pathInputs, whereInputs, extraInputs }) => dispatch
   });
 
   whereInputs.forEach(where => {
-    const { fieldName, condition, fieldValue } = where;
-    if (fieldName && condition && fieldValue) {
+    let { fieldName, condition, fieldType, fieldValue } = where;
+    if (fieldName && condition && fieldType && fieldValue) {
+      fieldValue = fieldType === 'number' ? parseInt(fieldValue) : fieldValue;
       query = query.where(fieldName.toString(), condition.toString(), fieldValue);
     }
   });

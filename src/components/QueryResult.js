@@ -144,7 +144,7 @@ function QueryResult(props) {
     const props = Object.keys(row);
 
     for (const prop of props) {
-      tableCells.push(<TableCell>{row[prop]}</TableCell>);
+      tableCells.push(<TableCell key={prop}>{row[prop]}</TableCell>);
     }
 
     return tableCells;
