@@ -1,0 +1,13 @@
+{
+  "firebaseConfig": {
+    "apiKey": "AIzaSyDerl2Rg8I9UfUPltZ65WNTAf_JqZ9ZVyE",
+    "authDomain": "manager-nico.firebaseapp.com",
+    "databaseURL": "https://manager-nico.firebaseio.com",
+    "projectId": "manager-nico",
+    "storageBucket": "manager-nico.appspot.com",
+    "messagingSenderId": "1077801360329",
+    "appId": "1:1077801360329:web:e678ef212f7b652a"
+  },
+  "testUser": "test@test.com",
+  "testPassword": "password"
+}
