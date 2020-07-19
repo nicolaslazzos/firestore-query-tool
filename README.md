@@ -1,2 +1,4 @@
-# firestore-query-executer
-Programita web para probar consultas a Firestore de una manera mas rapida.
+# Firestore Query Tool
+Web tool to make basic queries to Firestore and visualize data in a fast and easy way.
+
+Developed using React, Redux, Material-UI and Firebase.
