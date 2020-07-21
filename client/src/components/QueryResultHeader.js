@@ -27,6 +27,7 @@ function QueryResultHeader(props) {
             />
           </Tooltip>
         </TableCell>
+        <TableCell key="id">id</TableCell>
         {props.headCells.map(headCell => (
           <TableCell
             key={headCell.id}
@@ -37,7 +38,7 @@ function QueryResultHeader(props) {
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
             >
-              {headCell.label}
+              {headCell.id}
             </TableSortLabel>
           </TableCell>
         ))}

@@ -6,11 +6,11 @@ const router = express.Router();
 
 const formatDoc = doc => {
   const data = doc.data();
-
+  const props = Object.keys(data).sort();
   const formattedDoc = { id: doc.id, fields: {} };
 
-  for (const prop in data) {
-    let value = data[prop]
+  for (const prop of props) {
+    let value = data[prop];
     const type = Object.keys(doc._document.objectValue.proto.mapValue.fields[prop])[0];
 
     if (type === 'timestampValue') value = moment(value.toDate()).format('lll');
@@ -73,17 +73,12 @@ router.post('/', (req, res) => {
   query.get()
     .then(snapshot => {
       const result = [];
-      snapshot.forEach(doc => {
-        const { name, calories, fat, carbs, protein } = doc.data();
-        result.push({ _id: doc.id, name, calories, fat, carbs, protein });
-        // result.push(formatDoc(doc));
-      });
-
-      res.json(result)
+      snapshot.forEach(doc => result.push(formatDoc(doc)));
+      res.json(result);
     })
     .catch(error => {
       console.log(error);
-      res.status(500).send('Internal Server Error')
+      res.status(500).send('Internal Server Error');
     });
 });
 

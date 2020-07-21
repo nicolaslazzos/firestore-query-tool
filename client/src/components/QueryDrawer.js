@@ -24,7 +24,7 @@ import FirebaseConnection from './FirebaseConnection';
 const useStyles = makeStyles((theme) => ({
   drawerContainer: {
     overflow: 'auto',
-    padding: 15,
+    padding: 20,
     flexGrow: 1,
     backgroundColor: theme.palette.background.default
   }

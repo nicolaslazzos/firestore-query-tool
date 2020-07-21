@@ -35,10 +35,10 @@ const rows = [
 ];
 
 function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
+  if (b[orderBy].value < a[orderBy].value) {
     return -1;
   }
-  if (b[orderBy] > a[orderBy]) {
+  if (b[orderBy].value > a[orderBy].value) {
     return 1;
   }
   return 0;
@@ -52,7 +52,7 @@ function sortData(array, comparator) {
   const indexedData = array.map((object, index) => [object, index]);
 
   indexedData.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
+    const order = comparator(a[0].fields, b[0].fields);
     if (order !== 0) return order;
     return a[1] - b[1];
   });
@@ -89,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
 
 function QueryResult(props) {
   const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('_id');
+  const [orderBy, setOrderBy] = useState('calories');
   const [selected, setSelected] = useState([]);
   const [dense, setDense] = useState(false);
 
@@ -99,7 +99,7 @@ function QueryResult(props) {
     let props = [];
 
     if (data.length) {
-      props = Object.keys(data[0]).map(prop => ({ id: prop, numeric: false, disablePadding: true, label: prop }));
+      Object.keys(data[0].fields).forEach(prop => props.push({ id: prop, numeric: false, disablePadding: true }));
     };
 
     return props;
@@ -113,19 +113,19 @@ function QueryResult(props) {
 
   const onSelectAllPress = event => {
     if (event.target.checked) {
-      const newSelected = props.data.map(row => row._id);
+      const newSelected = props.data.map(row => row.id);
       return setSelected(newSelected);
     }
 
     setSelected([]);
   };
 
-  const onItemPress = (event, _id) => {
-    const selectedIndex = selected.indexOf(_id);
+  const onItemPress = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, _id);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -137,14 +137,15 @@ function QueryResult(props) {
     setSelected(newSelected);
   };
 
-  const isSelected = _id => selected.indexOf(_id) !== -1;
+  const isSelected = id => selected.indexOf(id) !== -1;
 
   const tableCellRenderer = row => {
     const tableCells = [];
-    const props = Object.keys(row);
 
-    for (const prop of props) {
-      tableCells.push(<TableCell key={prop}>{row[prop]}</TableCell>);
+    tableCells.push(<TableCell key='id'>{row['id']}</TableCell>);
+
+    for (const prop in row.fields) {
+      tableCells.push(<TableCell key={prop}>{row.fields[prop].value}</TableCell>);
     }
 
     return tableCells;
@@ -176,15 +177,15 @@ function QueryResult(props) {
             />
             <TableBody>
               {sortData(props.data, getComparator(order, orderBy)).map(row => {
-                const isItemSelected = isSelected(row._id);
+                const isItemSelected = isSelected(row.id);
 
                 return (
                   <TableRow
                     hover
-                    onClick={event => onItemPress(event, row._id)}
+                    onClick={event => onItemPress(event, row.id)}
                     role="checkbox"
                     tabIndex={-1}
-                    key={row._id.toString()}
+                    key={row.id}
                     selected={isItemSelected}
                     classes={{ selected: classes.selected }}
                     className={classes.tableRow}
