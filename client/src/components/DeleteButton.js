@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function DeleteButton(props) {
+const DeleteButton = props => {
   const classes = useStyles();
 
   return (
@@ -24,3 +24,5 @@ export default function DeleteButton(props) {
     </IconButton>
   )
 }
+
+export default DeleteButton;

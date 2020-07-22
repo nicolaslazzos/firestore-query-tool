@@ -1,31 +1,30 @@
 import React from 'react';
 import DeleteButton from './DeleteButton';
-import {
-  TextField,
-  Grid
-} from '@material-ui/core';
+import { TextField, Grid } from '@material-ui/core';
 
-export default function CollectionInput(props) {
+const PathInput = props => {
   return (
     <Grid spacing={1} alignItems='center' style={{ marginBottom: 15 }} container>
       <Grid item xs>
         <TextField
           variant="outlined"
           label='Collection Name'
+          name='collectionName'
           size='small'
           fullWidth
-          value={props.collectionName}
-          onChange={props.onCollectionNameChange}
+          value={props.value.collectionName}
+          onChange={props.onChange}
         />
       </Grid>
       <Grid item xs>
         <TextField
           variant="outlined"
           label='Document ID'
+          name='documentId'
           size='small'
           fullWidth
-          value={props.documentId}
-          onChange={props.onDocumentIdChange}
+          value={props.value.documentId}
+          onChange={props.onChange}
         />
       </Grid>
       <Grid item>
@@ -34,3 +33,5 @@ export default function CollectionInput(props) {
     </Grid>
   )
 }
+
+export default PathInput;

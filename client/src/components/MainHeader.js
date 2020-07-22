@@ -1,4 +1,5 @@
 import React from 'react';
+import { Menu as MenuIcon } from '@material-ui/icons';
 import {
   makeStyles,
   AppBar,
@@ -7,9 +8,6 @@ import {
   Button,
   IconButton
 } from '@material-ui/core';
-import {
-  Menu as MenuIcon
-} from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MainHeader(props) {
+const MainHeader = props => {
   const classes = useStyles();
 
   return (
@@ -46,3 +44,5 @@ export default function MainHeader(props) {
     </div>
   );
 }
+
+export default MainHeader;

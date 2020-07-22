@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import {
   makeStyles,
   Drawer,
@@ -10,13 +11,8 @@ import {
   Button,
   Grid,
 } from '@material-ui/core';
-import {
-  ExpandMore as ExpandMoreIcon
-} from '@material-ui/icons';
-import {
-  onDataRead
-} from '../actions';
-import CollectionInput from './CollectionInput';
+import { onDataRead } from '../actions';
+import PathInput from './PathInput';
 import WhereInput from './WhereInput';
 import ExtraInput from './ExtraInput';
 import FirebaseConnection from './FirebaseConnection';
@@ -27,6 +23,15 @@ const useStyles = makeStyles((theme) => ({
     padding: 20,
     flexGrow: 1,
     backgroundColor: theme.palette.background.default
+  },
+  panelDetails: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: 15
+  },
+  executeButton: {
+    marginTop: 15,
+    alignSelf: 'flex-end'
   }
 }));
 
@@ -34,7 +39,7 @@ const emptyPathInput = { collectionName: '', documentId: '' };
 const emptyWhereInput = { fieldName: '', condition: '', fieldType: '', fieldValue: '' };
 const emptyExtraInput = { extraType: '', extraValue: '' };
 
-function QueryDrawer(props) {
+const QueryDrawer = props => {
   const [pathInputs, setPathInputs] = useState([emptyPathInput]);
   const [whereInputs, setWhereInputs] = useState([emptyWhereInput]);
   const [extraInputs, setExtraInputs] = useState([emptyExtraInput]);
@@ -43,47 +48,38 @@ function QueryDrawer(props) {
 
   const onPathInputAdd = () => setPathInputs([...pathInputs, emptyPathInput]);
 
-  const onPathInputDelete = index => {
-    setPathInputs(pathInputs.filter((item, i) => i !== index));
-  };
+  const onPathInputDelete = index => setPathInputs(pathInputs.filter((item, i) => i !== index));
 
-  const onPathInputChange = ({ prop, value, index }) => {
+  const onPathInputChange = (e, index) => {
     setPathInputs(pathInputs.map((item, i) => {
-      if (index === i) return { ...item, [prop]: value };
+      if (index === i) return { ...item, [e.target.name]: e.target.value };
       return item;
     }))
   };
 
   const onWhereInputAdd = () => setWhereInputs([...whereInputs, emptyWhereInput]);
 
-  const onWhereInputDelete = index => {
-    setWhereInputs(whereInputs.filter((item, i) => i !== index));
-  };
+  const onWhereInputDelete = index => setWhereInputs(whereInputs.filter((item, i) => i !== index));
 
-  const onWhereInputChange = ({ prop, value, index }) => {
-    console.log(typeof value)
+  const onWhereInputChange = (e, index) => {
     setWhereInputs(whereInputs.map((item, i) => {
-      if (index === i) return { ...item, [prop]: value };
+      if (index === i) return { ...item, [e.target.name]: e.target.value };
       return item;
     }))
   };
 
   const onExtraInputAdd = () => setExtraInputs([...extraInputs, emptyExtraInput]);
 
-  const onExtraInputDelete = index => {
-    setExtraInputs(extraInputs.filter((item, i) => i !== index));
-  };
+  const onExtraInputDelete = index => setExtraInputs(extraInputs.filter((item, i) => i !== index));
 
-  const onExtraInputChange = ({ prop, value, index }) => {
+  const onExtraInputChange = (e, index) => {
     setExtraInputs(extraInputs.map((item, i) => {
-      if (index === i) return { ...item, [prop]: value };
+      if (index === i) return { ...item, [e.target.name]: e.target.value };
       return item;
     }))
   };
 
-  const onExecutePress = () => {
-    props.onDataRead({ pathInputs, whereInputs, extraInputs });
-  }
+  const onExecutePress = () => props.onDataRead({ pathInputs, whereInputs, extraInputs });
 
   return (
     <Drawer
@@ -98,16 +94,14 @@ function QueryDrawer(props) {
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>FROM</Typography>
           </ExpansionPanelSummary>
-          <ExpansionPanelDetails style={{ flexDirection: 'column', alignItems: 'center', padding: 15 }}>
+          <ExpansionPanelDetails className={classes.panelDetails}>
             {
               pathInputs.map((item, index) => {
                 return (
-                  <CollectionInput
-                    collectionName={item.collectionName}
-                    documentId={item.documentId}
+                  <PathInput
+                    value={item}
                     key={index.toString()}
-                    onCollectionNameChange={event => onPathInputChange({ prop: 'collectionName', value: event.target.value, index })}
-                    onDocumentIdChange={event => onPathInputChange({ prop: 'documentId', value: event.target.value, index })}
+                    onChange={e => onPathInputChange(e, index)}
                     onDeleteClick={() => onPathInputDelete(index)}
                   />
                 );
@@ -125,20 +119,14 @@ function QueryDrawer(props) {
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>WHERE</Typography>
           </ExpansionPanelSummary>
-          <ExpansionPanelDetails style={{ flexDirection: 'column', alignItems: 'center', padding: 15 }}>
+          <ExpansionPanelDetails className={classes.panelDetails}>
             {
               whereInputs.map((item, index) => {
                 return (
                   <WhereInput
-                    fieldName={item.fieldName}
-                    condition={item.condition}
-                    fieldType={item.fieldType}
-                    fieldValue={item.fieldValue}
+                    value={item}
                     key={index.toString()}
-                    onFieldNameChange={event => onWhereInputChange({ prop: 'fieldName', value: event.target.value, index })}
-                    onConditionChange={event => onWhereInputChange({ prop: 'condition', value: event.target.value, index })}
-                    onFieldTypeChange={event => onWhereInputChange({ prop: 'fieldType', value: event.target.value, index })}
-                    onFieldValueChange={value => onWhereInputChange({ prop: 'fieldValue', value, index })}
+                    onChange={e => onWhereInputChange(e, index)}
                     onDeleteClick={() => onWhereInputDelete(index)}
                   />
                 );
@@ -156,16 +144,14 @@ function QueryDrawer(props) {
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>EXTRA</Typography>
           </ExpansionPanelSummary>
-          <ExpansionPanelDetails style={{ flexDirection: 'column', alignItems: 'center', padding: 15 }}>
+          <ExpansionPanelDetails className={classes.panelDetails}>
             {
               extraInputs.map((item, index) => {
                 return (
                   <ExtraInput
-                    extraType={item.extraType}
-                    extraValue={item.extraValue}
+                    value={item}
                     key={index.toString()}
-                    onExtraTypeChange={event => onExtraInputChange({ prop: 'extraType', value: event.target.value, index })}
-                    onExtraValueChange={event => onExtraInputChange({ prop: 'extraValue', value: event.target.value, index })}
+                    onChange={e => onExtraInputChange(e, index)}
                     onDeleteClick={() => onExtraInputDelete(index)}
                   />
                 );
@@ -178,7 +164,8 @@ function QueryDrawer(props) {
             </Grid>
           </ExpansionPanelDetails>
         </ExpansionPanel>
-        <Button variant="contained" color="primary" style={{ marginTop: 15, alignSelf: 'flex-end' }} onClick={onExecutePress}>EXECUTE QUERY</Button>
+
+        <Button variant="contained" color="primary" className={classes.executeButton} onClick={onExecutePress}>EXECUTE QUERY</Button>
       </div>
     </Drawer>
   )

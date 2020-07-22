@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import { Delete as DeleteIcon, FilterList as FilterListIcon } from '@material-ui/icons';
 import {
   makeStyles,
   Toolbar,
@@ -11,10 +12,6 @@ import {
   Switch,
   Grid
 } from '@material-ui/core';
-import {
-  Delete as DeleteIcon,
-  FilterList as FilterListIcon
-} from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function QueryResultToolbar(props) {
+const QueryResultToolbar  = props => {
   const classes = useStyles();
   const { selectedCount } = props;
 

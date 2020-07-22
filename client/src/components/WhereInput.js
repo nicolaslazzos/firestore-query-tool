@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import DeleteButton from './DeleteButton';
+import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 import {
   TextField,
   Grid,
@@ -7,28 +8,26 @@ import {
   InputLabel,
   FormControl
 } from '@material-ui/core';
-import {
-  KeyboardDateTimePicker,
-  MuiPickersUtilsProvider
-} from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
+import DeleteButton from './DeleteButton';
 
 function usePrevious(value) {
   const ref = useRef();
+
   useEffect(() => {
     ref.current = value
   });
+
   return ref.current;
 }
 
-export default function WhereInput(props) {
-  const prevFieldType = usePrevious(props.fieldType);
+const WhereInput = props => {
+  const prevFieldType = usePrevious(props.value.fieldType);
 
   const setDefaultFieldValue = () => {
-    if (prevFieldType && prevFieldType !== props.fieldType) {
+    if (prevFieldType && prevFieldType !== props.value.fieldType) {
       let fieldValue;
 
-      switch (props.fieldType) {
+      switch (props.value.fieldType) {
         case 'timestamp':
           fieldValue = new Date();
           break;
@@ -42,14 +41,14 @@ export default function WhereInput(props) {
           fieldValue = '';
       }
 
-      props.onFieldValueChange(fieldValue);
+      props.onChange({ target: { name: 'fieldValue', value: fieldValue } });
     }
   };
 
-  useEffect(setDefaultFieldValue, [props.fieldType]);
+  useEffect(setDefaultFieldValue, [props.value.fieldType]);
 
   const fieldValueInputRenderer = () => {
-    switch (props.fieldType) {
+    switch (props.value.fieldType) {
       case 'null':
       case '':
         return null;
@@ -62,12 +61,13 @@ export default function WhereInput(props) {
                 format="MM/dd/yyyy HH:mm"
                 id="date-picker"
                 label="Date"
+                name="fieldValue"
                 size='small'
                 ampm={false}
                 fullWidth
                 KeyboardButtonProps={{ style: { marginBottom: 8 } }}
-                value={props.fieldValue || new Date()}
-                onChange={event => props.onFieldValueChange(event.target.value)}
+                value={props.value.fieldValue || new Date()}
+                onChange={value => props.onChange({ target: { name: 'fieldValue', value } })}
               />
             </MuiPickersUtilsProvider>
           </Grid>
@@ -79,17 +79,14 @@ export default function WhereInput(props) {
               <InputLabel htmlFor="outlined-field-value-native-simple">Field Value</InputLabel>
               <Select
                 native
-                value={!!props.fieldValue}
-                onChange={event => props.onFieldValueChange(event.target.value)}
+                value={props.value.fieldValue}
                 label="Field Value"
+                name="fieldValue"
                 size='small'
-                inputProps={{
-                  name: 'field-value',
-                  id: 'outlined-field-value-native-simple',
-                }}
+                onChange={props.onChange}
               >
-                <option value={true}>{'true'}</option>
-                <option value={false}>{'false'}</option>
+                <option value={true}>true</option>
+                <option value={false}>false</option>
               </Select>
             </FormControl>
           </Grid>
@@ -100,11 +97,12 @@ export default function WhereInput(props) {
             <TextField
               label='Field Value'
               size='small'
+              name="fieldValue"
               variant="outlined"
-              type={props.fieldType}
+              type={props.value.fieldType}
+              value={props.value.fieldValue}
+              onChange={props.onChange}
               fullWidth
-              value={props.fieldValue || ''}
-              onChange={event => props.onFieldValueChange(event.target.value)}
             />
           </Grid>
         )
@@ -117,9 +115,10 @@ export default function WhereInput(props) {
         <TextField
           label='Field Name'
           size='small'
+          name="fieldName"
           variant="outlined"
-          value={props.fieldName}
-          onChange={props.onFieldNameChange}
+          value={props.value.fieldName}
+          onChange={props.onChange}
           fullWidth
         />
       </Grid>
@@ -128,14 +127,11 @@ export default function WhereInput(props) {
           <InputLabel htmlFor="outlined-condition-native-simple">Condition</InputLabel>
           <Select
             native
-            value={props.condition}
-            onChange={props.onConditionChange}
+            name="condition"
+            value={props.value.condition}
+            onChange={props.onChange}
             label="Condition"
             size='small'
-            inputProps={{
-              name: 'condition',
-              id: 'outlined-condition-native-simple',
-            }}
           >
             <option value="" />
             <option value={'<'}>{'<'}</option>
@@ -152,21 +148,18 @@ export default function WhereInput(props) {
           <InputLabel htmlFor="outlined-field-type-native-simple">Field Type</InputLabel>
           <Select
             native
-            value={props.fieldType}
-            onChange={props.onFieldTypeChange}
+            name="fieldType"
+            value={props.value.fieldType}
+            onChange={props.onChange}
             label="Field Type"
             size='small'
-            inputProps={{
-              name: 'field-type',
-              id: 'outlined-field-type-native-simple',
-            }}
           >
             <option value="" />
-            <option value={'string'}>{'string'}</option>
-            <option value={'number'}>{'number'}</option>
-            <option value={'timestamp'}>{'timestamp'}</option>
-            <option value={'boolean'}>{'boolean'}</option>
-            <option value={'null'}>{'null'}</option>
+            <option value='string'>string</option>
+            <option value='number'>number</option>
+            <option value='timestamp'>timestamp</option>
+            <option value='boolean'>boolean</option>
+            <option value='null'>null</option>
           </Select>
         </FormControl>
       </Grid>
@@ -177,3 +170,5 @@ export default function WhereInput(props) {
     </Grid>
   )
 }
+
+export default WhereInput;

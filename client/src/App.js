@@ -31,7 +31,7 @@ const theme = createMuiTheme({
   }
 });
 
-export default function App() {
+const App = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const toggleDrawer = () => setOpenDrawer(!openDrawer);
@@ -39,8 +39,6 @@ export default function App() {
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
         <MainHeader onMenuClick={toggleDrawer} />
         <QueryDrawer open={openDrawer} onClose={toggleDrawer} />
         <QueryResult />
@@ -48,3 +46,5 @@ export default function App() {
     </Provider>
   );
 }
+
+export default App;

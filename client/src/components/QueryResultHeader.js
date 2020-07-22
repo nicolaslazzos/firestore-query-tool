@@ -9,7 +9,7 @@ import {
   Tooltip
 } from '@material-ui/core';
 
-function QueryResultHeader(props) {
+const QueryResultHeader = props => {
   const { onSelectAllPress, order, orderBy, selectedCount, rowCount, onRequestSort } = props;
 
   const createSortHandler = property => event => onRequestSort(event, property);
@@ -28,20 +28,22 @@ function QueryResultHeader(props) {
           </Tooltip>
         </TableCell>
         <TableCell key="id">id</TableCell>
-        {props.headCells.map(headCell => (
-          <TableCell
-            key={headCell.id}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
+        {
+          props.headCells.map(headCell => (
+            <TableCell
+              key={headCell.id}
+              sortDirection={orderBy === headCell.id ? order : false}
             >
-              {headCell.id}
-            </TableSortLabel>
-          </TableCell>
-        ))}
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : 'asc'}
+                onClick={createSortHandler(headCell.id)}
+              >
+                {headCell.id}
+              </TableSortLabel>
+            </TableCell>
+          ))
+        }
       </TableRow>
     </TableHead>
   );

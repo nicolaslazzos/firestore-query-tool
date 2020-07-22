@@ -14,41 +14,40 @@ import {
 import QueryResultHeader from './QueryResultHeader';
 import QueryResultToolbar from './QueryResultToolbar';
 
-function createData(_id, name, calories, fat, carbs, protein) {
-  return { _id, name, calories, fat, carbs, protein };
-}
+// function createData(_id, name, calories, fat, carbs, protein) {
+//   return { _id, name, calories, fat, carbs, protein };
+// }
 
-const rows = [
-  createData(1, 'Cupcake', 305, 3.7, 67, 4.3),
-  createData(2, 'Donut', 452, 25.0, 51, 4.9),
-  createData(3, 'Eclair', 262, 16.0, 24, 6.0),
-  createData(4, 'Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData(5, 'Gingerbread', 356, 16.0, 49, 3.9),
-  createData(6, 'Honeycomb', 408, 3.2, 87, 6.5),
-  createData(7, 'Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData(8, 'Jelly Bean', 375, 0.0, 94, 0.0),
-  createData(9, 'KitKat', 518, 26.0, 65, 7.0),
-  createData(10, 'Lollipop', 392, 0.2, 98, 0.0),
-  createData(11, 'Marshmallow', 318, 0, 81, 2.0),
-  createData(12, 'Nougat', 360, 19.0, 9, 37.0),
-  createData(13, 'Oreo', 437, 18.0, 63, 4.0),
-];
+// const rows = [
+//   createData(1, 'Cupcake', 305, 3.7, 67, 4.3),
+//   createData(2, 'Donut', 452, 25.0, 51, 4.9),
+//   createData(3, 'Eclair', 262, 16.0, 24, 6.0),
+//   createData(4, 'Frozen yoghurt', 159, 6.0, 24, 4.0),
+//   createData(5, 'Gingerbread', 356, 16.0, 49, 3.9),
+//   createData(6, 'Honeycomb', 408, 3.2, 87, 6.5),
+//   createData(7, 'Ice cream sandwich', 237, 9.0, 37, 4.3),
+//   createData(8, 'Jelly Bean', 375, 0.0, 94, 0.0),
+//   createData(9, 'KitKat', 518, 26.0, 65, 7.0),
+//   createData(10, 'Lollipop', 392, 0.2, 98, 0.0),
+//   createData(11, 'Marshmallow', 318, 0, 81, 2.0),
+//   createData(12, 'Nougat', 360, 19.0, 9, 37.0),
+//   createData(13, 'Oreo', 437, 18.0, 63, 4.0),
+// ];
 
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy].value < a[orderBy].value) {
-    return -1;
+const descendingComparator = (a, b, orderBy) => {
+  if (orderBy) {
+    if (b[orderBy].value < a[orderBy].value) return -1;
+    if (b[orderBy].value > a[orderBy].value) return 1;
   }
-  if (b[orderBy].value > a[orderBy].value) {
-    return 1;
-  }
+
   return 0;
 }
 
-function getComparator(order, orderBy) {
+const getComparator = (order, orderBy) => {
   return (a, b) => (order === 'desc' ? 1 : -1) * descendingComparator(a, b, orderBy);
 }
 
-function sortData(array, comparator) {
+const sortData = (array, comparator) => {
   const indexedData = array.map((object, index) => [object, index]);
 
   indexedData.sort((a, b) => {
@@ -87,9 +86,9 @@ const useStyles = makeStyles((theme) => ({
   selected: {}
 }));
 
-function QueryResult(props) {
+const QueryResult = props => {
   const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('calories');
+  const [orderBy, setOrderBy] = useState(null);
   const [selected, setSelected] = useState([]);
   const [dense, setDense] = useState(false);
 
@@ -120,7 +119,7 @@ function QueryResult(props) {
     setSelected([]);
   };
 
-  const onItemPress = (event, id) => {
+  const onItemPress = id => {
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -153,7 +152,7 @@ function QueryResult(props) {
 
   return (
     <div className={classes.root}>
-      < Paper className={classes.paper} elevation={3}>
+      <Paper className={classes.paper} elevation={3}>
         <QueryResultToolbar
           title='RESULTS'
           dense={dense}
@@ -182,7 +181,7 @@ function QueryResult(props) {
                 return (
                   <TableRow
                     hover
-                    onClick={event => onItemPress(event, row.id)}
+                    onClick={() => onItemPress(row.id)}
                     role="checkbox"
                     tabIndex={-1}
                     key={row.id}
