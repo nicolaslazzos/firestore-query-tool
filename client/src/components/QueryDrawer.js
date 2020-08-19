@@ -4,9 +4,9 @@ import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import {
   makeStyles,
   Drawer,
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
   Typography,
   Button,
   Grid,
@@ -90,11 +90,11 @@ const QueryDrawer = props => {
       <div className={classes.drawerContainer}>
         <FirebaseConnection />
 
-        <ExpansionPanel>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>FROM</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails className={classes.panelDetails}>
+          </AccordionSummary>
+          <AccordionDetails className={classes.panelDetails}>
             {
               pathInputs.map((item, index) => {
                 return (
@@ -112,14 +112,14 @@ const QueryDrawer = props => {
                 <Button variant="contained" color="primary" onClick={onPathInputAdd}>ADD PATH</Button>
               </Grid>
             </Grid>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+          </AccordionDetails>
+        </Accordion>
 
-        <ExpansionPanel>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>WHERE</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails className={classes.panelDetails}>
+          </AccordionSummary>
+          <AccordionDetails className={classes.panelDetails}>
             {
               whereInputs.map((item, index) => {
                 return (
@@ -137,14 +137,14 @@ const QueryDrawer = props => {
                 <Button variant="contained" color="primary" onClick={onWhereInputAdd}>ADD WHERE</Button>
               </Grid>
             </Grid>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+          </AccordionDetails>
+        </Accordion>
 
-        <ExpansionPanel>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>EXTRA</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails className={classes.panelDetails}>
+          </AccordionSummary>
+          <AccordionDetails className={classes.panelDetails}>
             {
               extraInputs.map((item, index) => {
                 return (
@@ -162,8 +162,8 @@ const QueryDrawer = props => {
                 <Button variant="contained" color="primary" onClick={onExtraInputAdd}>ADD EXTRA</Button>
               </Grid>
             </Grid>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+          </AccordionDetails>
+        </Accordion>
 
         <Button variant="contained" color="primary" className={classes.executeButton} onClick={onExecutePress}>EXECUTE QUERY</Button>
       </div>

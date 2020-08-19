@@ -5,6 +5,7 @@ import { ThemeProvider, createMuiTheme } from '@material-ui/core';
 import QueryDrawer from './components/QueryDrawer';
 import QueryResult from './components/QueryResult';
 import MainHeader from './components/MainHeader';
+import Alerts from './components/Alerts';
 import firebaseConfig from './environment';
 import store from './reducers';
 import './App.css';
@@ -39,6 +40,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
+        <Alerts />
         <MainHeader onMenuClick={toggleDrawer} />
         <QueryDrawer open={openDrawer} onClose={toggleDrawer} />
         <QueryResult />

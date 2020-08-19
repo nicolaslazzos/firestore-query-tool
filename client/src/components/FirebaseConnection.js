@@ -3,9 +3,9 @@ import firebase from 'firebase';
 import { Alert } from '@material-ui/lab';
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import {
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
   Typography,
   Button,
   Grid,
@@ -44,11 +44,11 @@ const FirebaseConnection = () => {
       >
         {connectionStatus}
       </Alert>
-      <ExpansionPanel>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography>FIREBASE CONFIGURATION</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails style={{ alignItems: 'flex-start', padding: 15 }}>
+        </AccordionSummary>
+        <AccordionDetails style={{ alignItems: 'flex-start', padding: 15 }}>
           <Grid spacing={1} alignItems='center' container>
             <Grid xs={12} style={{ paddingBottom: 10 }} item>
               <TextField
@@ -70,8 +70,8 @@ const FirebaseConnection = () => {
               </Button>
             </Grid>
           </Grid>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+        </AccordionDetails>
+      </Accordion>
     </div>
   )
 }

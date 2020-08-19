@@ -55,8 +55,8 @@ QueryResultHeader.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllPress: PropTypes.func.isRequired,
   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
+  orderBy: PropTypes.string,
 };
 
 export default QueryResultHeader;
