@@ -36,7 +36,7 @@ const MainHeader = props => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            FIRESTORE QUERY EXECUTER
+            FIRESTORE QUERY TOOL
           </Typography>
           <Button>Login</Button>
         </Toolbar>

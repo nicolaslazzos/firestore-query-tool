@@ -10,6 +10,7 @@ import {
   Typography,
   Button,
   Grid,
+  CircularProgress
 } from '@material-ui/core';
 import { onDataRead } from '../actions';
 import PathInput from './PathInput';
@@ -79,7 +80,10 @@ const QueryDrawer = props => {
     }))
   };
 
-  const onExecutePress = () => props.onDataRead({ pathInputs, whereInputs, extraInputs });
+  const onExecutePress = () => {
+    props.onDataRead({ pathInputs, whereInputs, extraInputs });
+    props.onClose();
+  }
 
   return (
     <Drawer

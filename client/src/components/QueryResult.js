@@ -15,6 +15,7 @@ import {
 } from '@material-ui/core';
 import QueryResultHeader from './QueryResultHeader';
 import QueryResultToolbar from './QueryResultToolbar';
+import TablePlaceholder from './TablePlaceholder';
 
 // function createData(_id, name, calories, fat, carbs, protein) {
 //   return { _id, name, calories, fat, carbs, protein };
@@ -160,6 +161,8 @@ const QueryResult = props => {
 
     return tableCells;
   }
+
+  if (!props.data.length || props.loading) return <TablePlaceholder loading={props.loading} />;
 
   return (
     <div className={classes.root}>
