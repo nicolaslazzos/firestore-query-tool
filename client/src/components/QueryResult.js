@@ -9,7 +9,9 @@ import {
   TableRow,
   Paper,
   Checkbox,
-  Typography
+  TablePagination,
+  Typography,
+  Grid
 } from '@material-ui/core';
 import QueryResultHeader from './QueryResultHeader';
 import QueryResultToolbar from './QueryResultToolbar';
@@ -91,6 +93,8 @@ const QueryResult = props => {
   const [orderBy, setOrderBy] = useState(null);
   const [selected, setSelected] = useState([]);
   const [dense, setDense] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(0);
 
   const classes = useStyles();
 
@@ -138,6 +142,13 @@ const QueryResult = props => {
 
   const isSelected = id => selected.indexOf(id) !== -1;
 
+  const onChangePage = (event, page) => setPage(page);
+
+  const onChangeRowsPerPage = event => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  }
+
   const tableCellRenderer = row => {
     const tableCells = [];
 
@@ -175,31 +186,49 @@ const QueryResult = props => {
               rowCount={props.data.length}
             />
             <TableBody>
-              {sortData(props.data, getComparator(order, orderBy)).map(row => {
-                const isItemSelected = isSelected(row.id);
+              {sortData(props.data, getComparator(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map(row => {
+                  const isItemSelected = isSelected(row.id);
 
-                return (
-                  <TableRow
-                    hover
-                    onClick={() => onItemPress(row.id)}
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={row.id}
-                    selected={isItemSelected}
-                    classes={{ selected: classes.selected }}
-                    className={classes.tableRow}
-                  >
-                    <TableCell padding="checkbox"><Checkbox color='primary' checked={isItemSelected} /></TableCell>
-                    {tableCellRenderer(row)}
-                  </TableRow>
-                );
-              })}
+                  return (
+                    <TableRow
+                      hover
+                      onClick={() => onItemPress(row.id)}
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={row.id}
+                      selected={isItemSelected}
+                      classes={{ selected: classes.selected }}
+                      className={classes.tableRow}
+                    >
+                      <TableCell padding="checkbox"><Checkbox color='primary' checked={isItemSelected} /></TableCell>
+                      {tableCellRenderer(row)}
+                    </TableRow>
+                  );
+                })}
             </TableBody>
           </Table>
         </TableContainer>
-        <Typography className={classes.title} component="div">
-          {`${props.data.length} ITEMS`}
-        </Typography>
+        <Grid
+          container
+          direction="row"
+          alignItems="center"
+        >
+          <Typography className={classes.title} component="div">
+            {props.data.length} ITEMS
+          </Typography>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 15, 20]}
+            component="div"
+            style={{ marginLeft: 'auto' }}
+            count={props.data.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={onChangePage}
+            onChangeRowsPerPage={onChangeRowsPerPage}
+          />
+        </Grid>
       </Paper>
     </div >
   );
