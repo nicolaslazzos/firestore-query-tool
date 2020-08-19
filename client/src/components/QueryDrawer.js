@@ -9,8 +9,7 @@ import {
   AccordionDetails,
   Typography,
   Button,
-  Grid,
-  CircularProgress
+  Grid
 } from '@material-ui/core';
 import { onDataRead } from '../actions';
 import PathInput from './PathInput';

@@ -25,7 +25,8 @@ const useStyles = makeStyles((theme) => ({
   },
   gridItem: {
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    padding: 8
   }
 }));
 
@@ -39,10 +40,10 @@ const TablePlaceholder = props => {
           props.loading ? <CircularProgress /> : (
             <Grid container>
               <Grid item xs={12} className={classes.gridItem}>
-                <img src={require('../img/empty.png')} width="80px" />
+                <img src={require('../img/empty.png')} width="80px" alt="no data was found"/>
               </Grid>
               <Grid item xs={12} className={classes.gridItem}>
-                <Typography component="div">NO DATA WAS FOUND</Typography>
+                <Typography component="h3" variant="h6">NO DATA WAS FOUND</Typography>
               </Grid>
             </Grid>
           )}

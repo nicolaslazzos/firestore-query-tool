@@ -89,7 +89,15 @@ const sanitizeExtras = value => {
 
     if (!extraType && !extraValue) return result;
 
-    extraValue = (extraType === 'limit') ? parseFloat(extraValue) : extraValue;
+    if (extraType.includes('orderBy')) {
+      if (extraType === 'orderByAsc') extraValue = [extraValue, 'asc'];
+      if (extraType === 'orderByDesc') extraValue = [extraValue, 'desc'];
+      extraType = 'orderBy';
+    } else if (extraType === 'limit') {
+      extraValue = [parseFloat(extraValue)];
+    } else {
+      extraValue = [extraValue];
+    }
 
     result.push({ extraType, extraValue });
 
@@ -126,25 +134,7 @@ router.post('/', [
 
   extraInputs.forEach(extra => {
     const { extraType, extraValue } = extra;
-
-    if (extraType && extraValue) {
-      switch (extraType) {
-        case 'orderByAsc':
-          return query = query.orderBy(extraValue, 'asc');
-        case 'orderByDesc':
-          return query = query.orderBy(extraValue, 'desc');
-        case 'limit':
-          return query = query.limit(extraValue);
-        case 'startAt':
-          return query = query.startAt(extraValue);
-        case 'startAfter':
-          return query = query.startAfter(extraValue);
-        case 'endBefore':
-          return query = query.endBefore(extraValue);
-        case 'endAt':
-          return query = query.endAt(extraValue);
-      }
-    }
+    query = query[extraType](...extraValue);
   });
 
   try {
