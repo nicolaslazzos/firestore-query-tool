@@ -30,18 +30,20 @@ const QueryResultHeader = props => {
         <TableCell key="id">id</TableCell>
         {
           props.headCells.map(headCell => (
-            <TableCell
-              key={headCell.id}
-              sortDirection={orderBy === headCell.id ? order : false}
-            >
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : 'asc'}
-                onClick={createSortHandler(headCell.id)}
+            <Tooltip title={headCell.type}>
+              <TableCell
+                key={headCell.id}
+                sortDirection={orderBy === headCell.id ? order : false}
               >
-                {headCell.id}
-              </TableSortLabel>
-            </TableCell>
+                <TableSortLabel
+                  active={orderBy === headCell.id}
+                  direction={orderBy === headCell.id ? order : 'asc'}
+                  onClick={createSortHandler(headCell.id)}
+                >
+                  {headCell.id}
+                </TableSortLabel>
+              </TableCell>
+            </Tooltip>
           ))
         }
       </TableRow>

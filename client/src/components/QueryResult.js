@@ -4,11 +4,8 @@ import {
   makeStyles,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
-  TableRow,
   Paper,
-  Checkbox,
   TablePagination,
   Typography,
   Grid
@@ -16,6 +13,7 @@ import {
 import QueryResultHeader from './QueryResultHeader';
 import QueryResultToolbar from './QueryResultToolbar';
 import TablePlaceholder from './TablePlaceholder';
+import QueryRow from './QueryRow';
 
 // function createData(_id, name, calories, fat, carbs, protein) {
 //   return { _id, name, calories, fat, carbs, protein };
@@ -80,13 +78,7 @@ const useStyles = makeStyles((theme) => ({
     padding: 20,
     paddingLeft: 15,
     paddingRight: 15
-  },
-  tableRow: {
-    "&$selected, &$selected:hover": {
-      backgroundColor: theme.palette.primary.dark,
-    }
-  },
-  selected: {}
+  }
 }));
 
 const QueryResult = props => {
@@ -99,11 +91,14 @@ const QueryResult = props => {
 
   const classes = useStyles();
 
-  function getPropNames(data) {
+  const getPropNames = data => {
     let props = [];
 
     if (data.length) {
-      Object.keys(data[0].fields).forEach(prop => props.push({ id: prop, numeric: false, disablePadding: true }));
+      const fields = data[0].fields;
+      for (let prop in fields) {
+        props.push({ id: prop, type: fields[prop].type, numeric: false, disablePadding: true });
+      }
     };
 
     return props;
@@ -150,19 +145,16 @@ const QueryResult = props => {
     setPage(0);
   }
 
-  const tableCellRenderer = row => {
-    const tableCells = [];
-
-    tableCells.push(<TableCell key='id'>{row['id']}</TableCell>);
-
-    for (const prop in row.fields) {
-      tableCells.push(<TableCell key={prop}>{row.fields[prop].value}</TableCell>);
-    }
-
-    return tableCells;
-  }
-
   if (!props.data.length || props.loading) return <TablePlaceholder loading={props.loading} />;
+
+  const renderRows = () => {
+    return sortData(props.data, getComparator(order, orderBy))
+      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+      .map(row => {
+        const isItemSelected = isSelected(row.id);
+        return <QueryRow key={row.id} row={row} selected={isItemSelected} onItemPress={onItemPress} />
+      });
+  }
 
   return (
     <div className={classes.root}>
@@ -189,27 +181,7 @@ const QueryResult = props => {
               rowCount={props.data.length}
             />
             <TableBody>
-              {sortData(props.data, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(row => {
-                  const isItemSelected = isSelected(row.id);
-
-                  return (
-                    <TableRow
-                      hover
-                      onClick={() => onItemPress(row.id)}
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.id}
-                      selected={isItemSelected}
-                      classes={{ selected: classes.selected }}
-                      className={classes.tableRow}
-                    >
-                      <TableCell padding="checkbox"><Checkbox color='primary' checked={isItemSelected} /></TableCell>
-                      {tableCellRenderer(row)}
-                    </TableRow>
-                  );
-                })}
+              {renderRows()}
             </TableBody>
           </Table>
         </TableContainer>
@@ -218,9 +190,7 @@ const QueryResult = props => {
           direction="row"
           alignItems="center"
         >
-          <Typography className={classes.title} component="div">
-            {props.data.length} ITEMS
-          </Typography>
+          <Typography className={classes.title} component="div">{props.data.length} ITEMS</Typography>
           <TablePagination
             rowsPerPageOptions={[5, 10, 15, 20]}
             component="div"
