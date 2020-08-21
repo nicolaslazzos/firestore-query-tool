@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import { connect } from 'react-redux';
 import { Alert } from '@material-ui/lab';
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import {
@@ -11,8 +12,9 @@ import {
   Grid,
   TextField
 } from '@material-ui/core';
+import { setAlert } from '../actions';
 
-const FirebaseConnection = () => {
+const FirebaseConnection = props => {
   const [firebaseConfiguration, setFirebaseConfiguration] = useState('');
   const [connectionStatus, setConnectionStatus] = useState('Disconnected');
 
@@ -28,13 +30,13 @@ const FirebaseConnection = () => {
           setConnectionStatus('Connected');
         }
       } else {
-        alert('Firebase app already exists!');
+        props.setAlert('There is already a firebase app added', 'error');
       }
     }
   }
 
   return (
-    <div>
+    <React.Fragment>
       <Alert
         variant='filled'
         elevation={6}
@@ -49,8 +51,8 @@ const FirebaseConnection = () => {
           <Typography>FIREBASE CONFIGURATION</Typography>
         </AccordionSummary>
         <AccordionDetails style={{ alignItems: 'flex-start', padding: 15 }}>
-          <Grid spacing={1} alignItems='center' container>
-            <Grid xs={12} style={{ paddingBottom: 10 }} item>
+          <Grid spacing={2} style={{ display: 'flex', flexDirection: 'column' }} container>
+            <Grid xs={12} item>
               <TextField
                 label="Firebase Configuration"
                 placeholder='Paste your firebase configuration JSON here'
@@ -69,11 +71,27 @@ const FirebaseConnection = () => {
                 {isConnected() ? 'DISCONNECT' : 'CONNECT TO FIREBASE'}
               </Button>
             </Grid>
+            {
+              isConnected() ?
+              <React.Fragment>
+                <Grid xs={12} item>
+                  <TextField label="E-Mail" variant="outlined" size="small" fullWidth />
+                </Grid>
+                <Grid xs={12} item>
+                  <TextField label="Password" variant="outlined" size="small" fullWidth />
+                </Grid>
+                <Grid xs={12} item>
+                  <Button variant="contained" color="primary" onClick={() => console.log('hola')}>
+                    LOG IN
+                </Button>
+                </Grid>
+              </React.Fragment> : null
+            }
           </Grid>
         </AccordionDetails>
       </Accordion>
-    </div>
+    </React.Fragment>
   )
 }
 
-export default FirebaseConnection;
+export default connect(null, { setAlert })(FirebaseConnection);

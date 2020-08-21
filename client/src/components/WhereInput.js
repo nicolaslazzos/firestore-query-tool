@@ -110,7 +110,7 @@ const WhereInput = props => {
   }
 
   return (
-    <Grid spacing={1} alignItems='center' style={{ marginBottom: 15 }} container >
+    <Grid spacing={1} style={{ marginBottom: 12 }} alignItems='center' container>
       <Grid item xs={3}>
         <TextField
           label='Field Name'

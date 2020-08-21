@@ -6,10 +6,11 @@ import {
   Toolbar,
   Typography,
   Button,
-  IconButton
+  IconButton,
+  Avatar
 } from '@material-ui/core';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
   },
@@ -23,6 +24,11 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     color: theme.palette.text.primary
   },
+  logo: {
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+    marginRight: 10
+  }
 }));
 
 const MainHeader = props => {
@@ -35,6 +41,12 @@ const MainHeader = props => {
           <IconButton edge="start" className={classes.menuButton} onClick={props.onMenuClick}>
             <MenuIcon />
           </IconButton>
+          <Avatar
+            variant="square"
+            alt="firebase logo"
+            src={require('../img/firebase-logo.png')}
+            className={classes.logo}
+          />
           <Typography variant="h6" className={classes.title}>
             FIRESTORE QUERY TOOL
           </Typography>

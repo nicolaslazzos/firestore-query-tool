@@ -4,7 +4,7 @@ import { TextField, Grid } from '@material-ui/core';
 
 const PathInput = props => {
   return (
-    <Grid spacing={1} alignItems='center' style={{ marginBottom: 15 }} container>
+    <Grid spacing={1} style={{ marginBottom: 12 }} alignItems='center' container>
       <Grid item xs>
         <TextField
           variant="outlined"

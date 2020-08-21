@@ -30,9 +30,11 @@ const QueryResultHeader = props => {
         <TableCell key="id">id</TableCell>
         {
           props.headCells.map(headCell => (
-            <Tooltip title={headCell.type}>
+            <Tooltip
+              key={headCell.id}
+              title={headCell.type}
+            >
               <TableCell
-                key={headCell.id}
                 sortDirection={orderBy === headCell.id ? order : false}
               >
                 <TableSortLabel

@@ -10,7 +10,7 @@ import {
 
 const ExtraInput = props => {
   return (
-    <Grid spacing={1} alignItems='center' style={{ marginBottom: 15 }} container >
+    <Grid spacing={1} style={{ marginBottom: 12 }} alignItems='center' container>
       <Grid item xs>
         <FormControl variant="outlined" size='small' fullWidth>
           <InputLabel htmlFor="outlined-type-native-simple">Type</InputLabel>
