@@ -169,6 +169,7 @@ const QueryResult = props => {
         <QueryResultToolbar
           title='RESULTS'
           dense={dense}
+          deleting={props.deleting}
           selectedCount={selected.length}
           onDenseToggle={() => setDense(!dense)}
           onDeleteClick={onDeleteClick}
@@ -216,8 +217,8 @@ const QueryResult = props => {
 }
 
 const mapStateToProps = state => {
-  const { data, loading, error } = state.queryResult;
-  return { data, loading, error };
+  const { data, loading, deleting, error } = state.queryResult;
+  return { data, loading, deleting, error };
 }
 
 export default connect(mapStateToProps, { onDataDelete })(QueryResult);

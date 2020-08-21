@@ -49,7 +49,7 @@ router.post('/', checkQueryParams, async (req, res) => {
 });
 
 // @route   POST api/firestore/delete
-// @desc    delete data
+// @desc    delete documents
 // @access  public
 router.post('/delete', async (req, res) => {
   const { paths } = req.body;

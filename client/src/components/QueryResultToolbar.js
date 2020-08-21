@@ -10,7 +10,8 @@ import {
   Tooltip,
   FormControlLabel,
   Switch,
-  Grid
+  Grid,
+  CircularProgress
 } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -26,9 +27,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const QueryResultToolbar  = props => {
+const QueryResultToolbar = props => {
   const classes = useStyles();
-  
+
   const { selectedCount } = props;
 
   return (
@@ -45,8 +46,12 @@ const QueryResultToolbar  = props => {
 
       {selectedCount > 0 ? (
         <Tooltip title="Delete">
-          <IconButton onClick={props.onDeleteClick}>
-            <DeleteIcon />
+          <IconButton>
+            {
+              !props.deleting ?
+                <DeleteIcon onClick={props.onDeleteClick} /> :
+                <CircularProgress color="white" size={20} />
+            }
           </IconButton>
         </Tooltip>
       ) : (
