@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 const QueryResultToolbar  = props => {
   const classes = useStyles();
+  
   const { selectedCount } = props;
 
   return (
@@ -44,7 +45,7 @@ const QueryResultToolbar  = props => {
 
       {selectedCount > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={props.onDeleteClick}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>

@@ -3,7 +3,8 @@ import { setAlert } from './AlertsActions';
 import {
   ON_DATA_READING,
   ON_DATA_READ,
-  ON_DATA_READ_FAIL
+  ON_DATA_DELETE,
+  ON_QUERY_ERROR
 } from './types';
 
 export const onDataRead = ({ pathInputs, whereInputs, extraInputs }) => async dispatch => {
@@ -17,6 +18,15 @@ export const onDataRead = ({ pathInputs, whereInputs, extraInputs }) => async di
 
     if (errors) errors.forEach(error => dispatch(setAlert(error.msg, 'error')));
 
-    dispatch({ type: ON_DATA_READ_FAIL, payload: { msg: error.response.statusText, status: error.response.status } });
+    dispatch({ type: ON_QUERY_ERROR, payload: { msg: error.response.statusText, status: error.response.status } });
+  }
+}
+
+export const onDataDelete = paths => async dispatch => {
+  try {
+    const res = await axios.post('/api/firestore/delete', { paths });
+    dispatch({ type: ON_DATA_DELETE, payload: res.data });
+  } catch (error) {
+    dispatch({ type: ON_QUERY_ERROR, payload: { msg: error.response.statusText, status: error.response.status } });
   }
 }

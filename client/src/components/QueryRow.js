@@ -35,7 +35,7 @@ const QueryRow = props => {
   return (
     <TableRow
       hover
-      onClick={() => onItemPress(row.id)}
+      onClick={() => onItemPress(row.path)}
       role="checkbox"
       tabIndex={-1}
       selected={selected}

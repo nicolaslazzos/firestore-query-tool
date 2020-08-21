@@ -3,7 +3,7 @@ const moment = require('moment');
 module.exports = doc => {
   const data = doc.data();
   const props = Object.keys(data).sort();
-  const formattedDoc = { id: doc.id, fields: {} };
+  const formattedDoc = { id: doc.id, path: doc.ref.path, fields: {} };
 
   for (const prop of props) {
     let value = data[prop];

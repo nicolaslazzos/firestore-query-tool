@@ -37,9 +37,31 @@ router.post('/', checkQueryParams, async (req, res) => {
   try {
     const snapshot = await query.get();
     const result = [];
-    snapshot.forEach(doc => result.push(formatDoc(doc)));
+
+    if (!snapshot.docs) result.push(formatDoc(snapshot));
+    else snapshot.forEach(doc => result.push(formatDoc(doc)));
 
     res.json(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// @route   POST api/firestore/delete
+// @desc    delete data
+// @access  public
+router.post('/delete', async (req, res) => {
+  const { paths } = req.body;
+
+  let query = firebase.firestore();
+
+  try {
+    for (let path of paths) {
+      await query.doc(path).delete();
+    }
+
+    res.json(paths);
   } catch (error) {
     console.log(error);
     res.status(500).send('Internal Server Error');

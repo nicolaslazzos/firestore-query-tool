@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import {
   makeStyles,
@@ -14,6 +14,7 @@ import QueryResultHeader from './QueryResultHeader';
 import QueryResultToolbar from './QueryResultToolbar';
 import TablePlaceholder from './TablePlaceholder';
 import QueryRow from './QueryRow';
+import { onDataDelete } from '../actions';
 
 // function createData(_id, name, calories, fat, carbs, protein) {
 //   return { _id, name, calories, fat, carbs, protein };
@@ -91,6 +92,8 @@ const QueryResult = props => {
 
   const classes = useStyles();
 
+  useEffect(() => { setSelected([]) }, [props.data]);
+
   const getPropNames = data => {
     let props = [];
 
@@ -119,12 +122,12 @@ const QueryResult = props => {
     setSelected([]);
   };
 
-  const onItemPress = id => {
-    const selectedIndex = selected.indexOf(id);
+  const onItemPress = path => {
+    const selectedIndex = selected.indexOf(path);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
+      newSelected = newSelected.concat(selected, path);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -136,7 +139,11 @@ const QueryResult = props => {
     setSelected(newSelected);
   };
 
-  const isSelected = id => selected.indexOf(id) !== -1;
+  const isSelected = path => selected.indexOf(path) !== -1;
+
+  const onDeleteClick = () => {
+    props.onDataDelete(selected);
+  }
 
   const onChangePage = (event, page) => setPage(page);
 
@@ -151,7 +158,7 @@ const QueryResult = props => {
     return sortData(props.data, getComparator(order, orderBy))
       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
       .map(row => {
-        const isItemSelected = isSelected(row.id);
+        const isItemSelected = isSelected(row.path);
         return <QueryRow key={row.id} row={row} selected={isItemSelected} onItemPress={onItemPress} />
       });
   }
@@ -164,6 +171,7 @@ const QueryResult = props => {
           dense={dense}
           selectedCount={selected.length}
           onDenseToggle={() => setDense(!dense)}
+          onDeleteClick={onDeleteClick}
         />
         <TableContainer>
           <Table
@@ -212,4 +220,4 @@ const mapStateToProps = state => {
   return { data, loading, error };
 }
 
-export default connect(mapStateToProps, null)(QueryResult);
+export default connect(mapStateToProps, { onDataDelete })(QueryResult);
