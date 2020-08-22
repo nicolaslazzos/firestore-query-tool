@@ -1,4 +1,4 @@
-const { check } = require('express-validator');
+const { body } = require('express-validator');
 
 const validatePaths = value => {
   value.forEach((path, i) => {
@@ -84,7 +84,7 @@ const sanitizeExtras = value => {
 }
 
 module.exports = [
-  check('pathInputs').custom(validatePaths).customSanitizer(sanitizePaths),
-  check('whereInputs').custom(validateWheres).customSanitizer(sanitizeWheres),
-  check('extraInputs').custom(validateExtras).customSanitizer(sanitizeExtras),
+  body('pathInputs').custom(validatePaths).customSanitizer(sanitizePaths),
+  body('whereInputs').custom(validateWheres).customSanitizer(sanitizeWheres),
+  body('extraInputs').custom(validateExtras).customSanitizer(sanitizeExtras),
 ]

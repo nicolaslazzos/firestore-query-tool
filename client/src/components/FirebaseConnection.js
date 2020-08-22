@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import firebase from 'firebase/app';
 import { connect } from 'react-redux';
 import { Alert } from '@material-ui/lab';
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
@@ -12,27 +11,24 @@ import {
   Grid,
   TextField
 } from '@material-ui/core';
-import { setAlert } from '../actions';
+import { onAppAdd, onAppRemove, onLogIn } from '../actions';
 
 const FirebaseConnection = props => {
   const [firebaseConfiguration, setFirebaseConfiguration] = useState('');
-  const [connectionStatus, setConnectionStatus] = useState('Disconnected');
+  const [auth, setAuth] = useState({ email: '', password: '' });
 
-  const isConnected = () => connectionStatus === 'Connected';
+  const onAuthChange = e => setAuth({ ...auth, [e.target.name]: e.target.value });
 
   const onConnectFirebasePress = () => {
-    if (isConnected()) {
-      firebase.app().delete().then(() => setConnectionStatus('Disconnected'));
+    if (props.connected) {
+      props.onAppRemove();
     } else {
-      if (!firebase.apps.length) {
-        if (firebaseConfiguration) {
-          firebase.initializeApp(firebaseConfiguration);
-          setConnectionStatus('Connected');
-        }
-      } else {
-        props.setAlert('There is already a firebase app added', 'error');
-      }
+      props.onAppAdd(firebaseConfiguration);
     }
+  }
+
+  const onLoginPress = () => {
+    props.onLogIn(auth);
   }
 
   return (
@@ -41,10 +37,10 @@ const FirebaseConnection = props => {
         variant='filled'
         elevation={6}
         size='small'
-        severity={isConnected() ? 'success' : 'error'}
+        severity={props.connected ? 'success' : 'error'}
         style={{ marginBottom: 15, alignItems: 'center' }}
       >
-        {connectionStatus}
+        {props.connected ? 'Connected' : 'Disconnected'}
       </Alert>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -55,12 +51,12 @@ const FirebaseConnection = props => {
             <Grid xs={12} item>
               <TextField
                 label="Firebase Configuration"
-                placeholder='Paste your firebase configuration JSON here'
+                placeholder='Paste your firebase configuration object here'
                 name="firebaseConfiguration"
                 variant="outlined"
                 value={firebaseConfiguration}
                 onChange={e => setFirebaseConfiguration(e.target.value)}
-                disabled={isConnected()}
+                disabled={props.connected}
                 rows={9}
                 multiline
                 fullWidth
@@ -68,24 +64,44 @@ const FirebaseConnection = props => {
             </Grid>
             <Grid xs={12} item>
               <Button variant="contained" color="primary" onClick={onConnectFirebasePress}>
-                {isConnected() ? 'DISCONNECT' : 'CONNECT TO FIREBASE'}
+                {props.connected ? 'DISCONNECT' : 'CONNECT TO FIREBASE'}
               </Button>
             </Grid>
             {
-              isConnected() ?
-              <React.Fragment>
-                <Grid xs={12} item>
-                  <TextField label="E-Mail" variant="outlined" size="small" fullWidth />
-                </Grid>
-                <Grid xs={12} item>
-                  <TextField label="Password" variant="outlined" size="small" fullWidth />
-                </Grid>
-                <Grid xs={12} item>
-                  <Button variant="contained" color="primary" onClick={() => console.log('hola')}>
-                    LOG IN
+              props.connected ?
+                <React.Fragment>
+                  <Grid xs={12} item>
+                    <TextField
+                      label="E-Mail"
+                      name="email"
+                      variant="outlined"
+                      size="small"
+                      value={auth.email}
+                      onChange={onAuthChange}
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid xs={12} item>
+                    <TextField
+                      label="Password"
+                      name="password"
+                      variant="outlined"
+                      size="small"
+                      value={auth.password}
+                      onChange={onAuthChange}
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid xs={12} item>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={onLoginPress}
+                    >
+                      LOG IN
                 </Button>
-                </Grid>
-              </React.Fragment> : null
+                  </Grid>
+                </React.Fragment> : null
             }
           </Grid>
         </AccordionDetails>
@@ -94,4 +110,9 @@ const FirebaseConnection = props => {
   )
 }
 
-export default connect(null, { setAlert })(FirebaseConnection);
+const mapStateToProps = state => {
+  const { user, connected, loadingApp, loadingAuth } = state.auth;
+  return { user, connected, loadingApp, loadingAuth };
+}
+
+export default connect(mapStateToProps, { onAppAdd, onAppRemove, onLogIn })(FirebaseConnection);
