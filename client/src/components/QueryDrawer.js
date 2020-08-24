@@ -11,7 +11,7 @@ import {
   Button,
   Grid
 } from '@material-ui/core';
-import { onDataRead } from '../actions';
+import { onDataRead, setAlert } from '../actions';
 import PathInput from './PathInput';
 import WhereInput from './WhereInput';
 import ExtraInput from './ExtraInput';
@@ -80,8 +80,12 @@ const QueryDrawer = props => {
   };
 
   const onExecutePress = () => {
-    props.onDataRead({ pathInputs, whereInputs, extraInputs });
-    props.onClose();
+    if (props.connected) {
+      props.onDataRead({ pathInputs, whereInputs, extraInputs });
+      props.onClose();
+    } else {
+      props.setAlert('You should add a firebase app by pasting your configuration object in the Firebase Configuration section', 'error');
+    }
   }
 
   return (
@@ -174,4 +178,6 @@ const QueryDrawer = props => {
   )
 }
 
-export default connect(null, { onDataRead })(QueryDrawer);
+const mapStateToProps = ({ auth }) => ({ connected: auth.connected });
+
+export default connect(mapStateToProps, { onDataRead, setAlert })(QueryDrawer);

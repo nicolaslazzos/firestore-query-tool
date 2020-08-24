@@ -8,8 +8,8 @@ const app = express();
 app.use(express.json({ extended: false }))
 
 // connecting to firebase and auth
-firebase.initializeApp(config.get('firebaseConfig'));
-firebase.auth().signInWithEmailAndPassword(config.get('testUser'), config.get('testPassword')).then(() => console.log('Authenticated'));
+// firebase.initializeApp(config.get('firebaseConfig'));
+// firebase.auth().signInWithEmailAndPassword(config.get('testUser'), config.get('testPassword')).then(() => console.log('Authenticated'));
 
 app.get('/', (req, res) => res.send('API Running'));
 

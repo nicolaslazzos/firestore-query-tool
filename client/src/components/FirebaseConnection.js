@@ -51,7 +51,7 @@ const FirebaseConnection = props => {
             <Grid xs={12} item>
               <TextField
                 label="Firebase Configuration"
-                placeholder='Paste your firebase configuration object here'
+                placeholder='Paste your firebase configuration JSON here'
                 name="firebaseConfiguration"
                 variant="outlined"
                 value={firebaseConfiguration}

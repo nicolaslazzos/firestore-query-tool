@@ -42,7 +42,7 @@ router.post('/app', [
   const { firebaseConfiguration } = req.body;
 
   try {
-    firebase.initializeApp(firebaseConfiguration);
+    firebase.initializeApp(JSON.parse(firebaseConfiguration));
 
     res.json({ connected: !!firebase.apps.length });
   } catch (error) {
